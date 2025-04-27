@@ -2,6 +2,8 @@
 
 A Flask application that simplifies medical reports by converting technical medical terms into plain language explanations using Google's Gemini AI.
 
+![Project live screenshot](https://raw.githubusercontent.com/Jayant-001/Medical-Report-Simplifier/refs/heads/main/static/ai_medical_report_simplifier_ss.png)
+
 ## Features
 
 - Home page with a form to input medical reports
