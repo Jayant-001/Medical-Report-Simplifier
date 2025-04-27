@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Report Simplifier</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: 40px auto;
+        }
+        h1 {
+            color: #1e90ff;
+            text-align: center;
+            border-bottom: 3px solid #74b9ff;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            resize: vertical;
+        }
+        .btn {
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #007bff;
+        }
+        .loading {
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #1e90ff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Medical Report Simplifier</h1>
+        
+        <form id="report-form">
+            <textarea id="report-text" name="report_text" placeholder="Paste your medical report here..."></textarea>
+            <button type="submit" class="btn">Generate Simplified Report</button>
+        </form>
+        
+        <div id="loading" class="loading">
+            <div class="loader"></div>
+            <p>Processing your report... This may take a moment.</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('report-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const reportText = document.getElementById('report-text').value.trim();
+            if (!reportText) {
+                alert('Please enter a medical report to process.');
+                return;
+            }
+            
+            // Show loading indicator
+            document.getElementById('loading').style.display = 'block';
+            
+            try {
+                const response = await fetch('/process_report', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ report_text: reportText }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error processing report');
+                }
+                
+                const htmlContent = await response.text();
+                
+                // Create a new window with the processed report
+                const newWindow = window.open('', '_blank');
+                newWindow.document.write(htmlContent);
+                newWindow.document.close();
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing the report. Please try again.');
+            } finally {
+                // Hide loading indicator
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

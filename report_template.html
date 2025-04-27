@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Report</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #eef2f7;
+      margin: 0;
+      padding: 20px;
+    }
+    #report-container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      max-width: 900px;
+      margin: 0 auto;
+      line-height: 1.7;
+      color: #2d3436;
+    }
+    h2 {
+      color: #1e90ff;
+      border-bottom: 3px solid #74b9ff;
+      padding-bottom: 8px;
+      margin-top: 25px;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    p {
+      margin: 12px 0;
+      font-size: 16px;
+    }
+    ul, ol {
+      margin: 12px 0 12px 20px;
+      padding-left: 20px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    .medical-term {
+      color: #d63031;
+      font-weight: bold;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.2s;
+    }
+    .medical-term:hover {
+      color: #ff7675;
+    }
+    .medical-term:hover::after {
+      content: attr(data-explanation);
+      position: absolute;
+      left: 0;
+      bottom: 100%;
+      background-color: #2d3436;
+      color: #fff;
+      padding: 12px;
+      border-radius: 6px;
+      width: 280px;
+      font-size: 14px;
+      font-weight: normal;
+      z-index: 2;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 25px;
+      border-radius: 10px;
+      width: 85%;
+      max-width: 550px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    .close {
+      color: #636e72;
+      float: right;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: #2d3436;
+    }
+    #modal-text {
+      font-size: 16px;
+      color: #2d3436;
+      line-height: 1.5;
+    }
+    @media (max-width: 768px) {
+      #report-container {
+        padding: 20px;
+      }
+      h2 {
+        font-size: 20px;
+      }
+      .medical-term:hover::after {
+        width: 220px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="report-container">
+    <!-- LLM-generated content goes here -->
+  </div>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <p id="modal-text"></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('report-container').addEventListener('click', function(event) {
+      if (event.target.classList.contains('medical-term')) {
+        const term = event.target.textContent;
+        const explanation = event.target.getAttribute('data-explanation');
+        document.getElementById('modal-text').textContent = `${explanation}`;
+        document.getElementById('modal').style.display = 'block';
+      }
+    });
+
+    document.getElementById('close-modal').addEventListener('click', function() {
+      document.getElementById('modal').style.display = 'none';
+    });
+
+    window.addEventListener('click', function(event) {
+      if (event.target == document.getElementById('modal')) {
+        document.getElementById('modal').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
